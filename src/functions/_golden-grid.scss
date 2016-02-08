@@ -1,0 +1,7 @@
+@function golden-grid($val) {
+  @if map-has-key($golden-grid-config, $val) {
+    @return map-get($golden-grid-config, $val);
+  } @else {
+    @error '#{$val} does not exist';
+  }
+}

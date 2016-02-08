@@ -1,0 +1,148 @@
+// import the breakpoints mixin
+@import '../node_modules/breakpoints/src/index';
+
+@import 'variables/index';
+@import 'functions/index';
+@import 'mixins/index';
+
+
+
+// config
+
+$golden-grid-config: (
+  ratio: 1.618,
+  ie8: '.ie-8',
+  ie9: '.ie-9',
+  support-ie: true,
+  max-number: 2,
+  utility-classes: true,
+  utility-classes-breakpoints: (
+    medium: mobile-medium,
+    large: tablet-medium,
+    x-large: desktop-medium
+  )
+)!default;
+
+
+@function golden-grid($val) {
+  @if map-has-key($golden-grid-config, $val) {
+    @return map-get($golden-grid-config, $val);
+  } @else {
+    @error '#{$val} does not exist';
+  }
+}
+
+$golden-ratio-scale: 1;
+
+@mixin column($proportion) {
+  flex-grow: $proportion;
+  flex-basis: $proportion * 1%;
+
+  @if golden-grid(support-ie) {
+    #{unquote(golden-grid(ie8))} &,å
+    #{unquote(golden-grid(ie9))} & {
+      width: $proportion * 1%;
+    }
+  }
+}
+
+@for $i from 1 to golden-grid(max-number) {
+  $last-element: nth($golden-ratio-scale, length($golden-ratio-scale));
+  $golden-ratio-scale: append($golden-ratio-scale, $last-element * golden-grid(ratio));
+}
+
+
+@mixin columns($proportions...) {
+  display: flex;
+
+  @if golden-grid(support-ie) {
+    #{unquote(golden-grid(ie8))} &,
+    #{unquote(golden-grid(ie9))} & {
+      display: table;
+      table-layout: fixed;
+
+      > * {
+        display: table-cell;
+      }
+    }
+  }
+
+
+  @for $i from 1 through length($proportions) {
+    $current-element: nth($proportions, $i);
+
+    @if $current-element > golden-grid(max-number) {
+      @warn 'You have set a proportion bigger than the maximum available one (max-number: #{golden-grid(max-number)}, your value: #{$current-element})';
+
+      $current-element: golden-grid(max-number);
+    }
+
+    $current-proportion: nth($golden-ratio-scale, $current-element);
+
+    > :nth-child(#{$i}) {
+      @include column($current-proportion);
+    }
+  }
+}
+
+
+
+@if golden-grid(utility-classes) {
+
+  $current-breakpoints: golden-grid(utility-classes-breakpoints);
+  $current-breakpoints-keys: map-keys($current-breakpoints);
+  $current-breakpoints-values: map-values($current-breakpoints);
+  $current-breakpoints-values: append($current-breakpoints-values, false);
+
+  .col-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+
+    > * {
+      width: 100%;
+    }
+
+    @if golden-grid(support-ie) {
+      #{unquote(golden-grid(ie8))} &,
+      #{unquote(golden-grid(ie9))} & {
+        display: table;
+        table-layout: fixed;
+      }
+    }
+  }
+
+  @for $i from 1 through golden-grid(max-number) {
+    $current-proportion: nth($golden-ratio-scale, $i);
+
+    .col-#{$i} {
+      @include column($current-proportion);
+    }
+
+  }
+
+  @for $i from 1 through (length($current-breakpoints-values) - 1) {
+    @include breakpoints(from nth($current-breakpoints-values, $i)) {
+      @for $j from 1 through golden-grid(max-number) {
+        $current-proportion: nth($golden-ratio-scale, $j);
+
+        .col-#{nth($current-breakpoints-keys, $i)}-#{$j} {
+          @include column($current-proportion);
+        }
+      }
+    }
+
+    @if golden-grid(support-ie) {
+      @for $j from 1 through golden-grid(max-number) {
+        $current-proportion: nth($golden-ratio-scale, $j);
+
+        #{unquote(golden-grid(ie8))},
+        #{unquote(golden-grid(ie9))} {
+          .col-#{nth($current-breakpoints-keys, $i)}-#{$j} {
+            width: $current-proportion * 1%;
+          }
+        }
+      }
+    }
+  }
+
+}

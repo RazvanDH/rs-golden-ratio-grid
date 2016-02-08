@@ -1,0 +1,37 @@
+@mixin columns($proportions...) {
+  @if golden-grid(ie9) {
+    #{unquote(golden-grid(ie9))} & {
+      display: table;
+      table-layout: fixed;
+      width: 100%;
+    }
+  }
+
+  display: flex;
+
+
+  @for $i from 1 through length($proportions) {
+    $current-element: nth($proportions, $i);
+
+    @if $current-element > golden-grid(max-number) {
+      @warn 'You have set a proportion bigger than the maximum available one (max-number: #{golden-grid(max-number)}, your value: #{$current-element})';
+
+      $current-element: golden-grid(max-number);
+    }
+
+    $current-proportion: nth($golden-ratio-scale, $current-element);
+
+    > :nth-child(#{$i}) {
+
+      @if golden-grid(ie9) {
+        #{unquote(golden-grid(ie9))} & {
+          width: $current-proportion * 1%;
+          display: table-cell;
+        }
+      }
+
+      flex-grow: $current-proportion;
+      flex-basis: $current-proportion * 1%;
+    }
+  }
+}

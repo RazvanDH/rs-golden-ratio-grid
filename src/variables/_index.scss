@@ -1,0 +1,13 @@
+// config
+
+$golden-grid-config: (
+  ratio: 1.618,
+  ie9: '.ie-9',
+  max-number: 8,
+  utility-classes: true,
+  utility-classes-breakpoints: (
+    medium: mobile-medium,
+    large: tablet-medium,
+    x-large: desktop-medium
+  )
+)!default;
