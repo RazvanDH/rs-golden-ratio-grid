@@ -1,0 +1,27 @@
+// this mixin sets the styling for the wrapper of the elements
+// the flag is for table support
+
+@mixin columns-wrapper {
+
+  @if gr(no-flex-class) {
+    #{unquote(gr(no-flex-class))} & {
+      > * {
+        @include column-padding;
+      }
+
+      &:after {
+        content: '';
+      }
+    }
+  }
+
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+
+  width: 100%;
+}

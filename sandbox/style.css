@@ -1,0 +1,137 @@
+.col-s-wrapper {
+  display: table;
+  table-layout: fixed;
+  width: 100%; }
+
+.col-s-wrapper > * {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  display: table-cell; }
+
+.col-s-1 {
+  width: 1%; }
+
+.col-s-2 {
+  width: 1.618%; }
+
+.col-s-3 {
+  width: 2.61792%; }
+
+.col-s-4 {
+  width: 4.2358%; }
+
+.col-s-5 {
+  width: 6.85353%; }
+
+.col-s-6 {
+  width: 11.08901%; }
+
+.col-s-7 {
+  width: 17.94201%; }
+
+.col-s-8 {
+  width: 29.03017%; }
+
+.col-s-9 {
+  width: 46.97082%; }
+
+.col-s-10 {
+  width: 75.99879%; }
+
+@media only screen and (min-width: 480px) {
+  .col-m-wrapper {
+    display: table;
+    table-layout: fixed;
+    width: 100%; }
+  .col-m-wrapper > * {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    display: table-cell; }
+  .col-m-1 {
+    width: 1%; }
+  .col-m-2 {
+    width: 1.618%; }
+  .col-m-3 {
+    width: 2.61792%; }
+  .col-m-4 {
+    width: 4.2358%; }
+  .col-m-5 {
+    width: 6.85353%; }
+  .col-m-6 {
+    width: 11.08901%; }
+  .col-m-7 {
+    width: 17.94201%; }
+  .col-m-8 {
+    width: 29.03017%; }
+  .col-m-9 {
+    width: 46.97082%; }
+  .col-m-10 {
+    width: 75.99879%; } }
+
+@media only screen and (min-width: 800px) {
+  .col-l-wrapper {
+    display: table;
+    table-layout: fixed;
+    width: 100%; }
+  .col-l-wrapper > * {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    display: table-cell; }
+  .col-l-1 {
+    width: 1%; }
+  .col-l-2 {
+    width: 1.618%; }
+  .col-l-3 {
+    width: 2.61792%; }
+  .col-l-4 {
+    width: 4.2358%; }
+  .col-l-5 {
+    width: 6.85353%; }
+  .col-l-6 {
+    width: 11.08901%; }
+  .col-l-7 {
+    width: 17.94201%; }
+  .col-l-8 {
+    width: 29.03017%; }
+  .col-l-9 {
+    width: 46.97082%; }
+  .col-l-10 {
+    width: 75.99879%; } }
+
+@media only screen and (min-width: 1200px) {
+  .col-xl-wrapper {
+    display: table;
+    table-layout: fixed;
+    width: 100%; }
+  .col-xl-wrapper > * {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    display: table-cell; }
+  .col-xl-1 {
+    width: 1%; }
+  .col-xl-2 {
+    width: 1.618%; }
+  .col-xl-3 {
+    width: 2.61792%; }
+  .col-xl-4 {
+    width: 4.2358%; }
+  .col-xl-5 {
+    width: 6.85353%; }
+  .col-xl-6 {
+    width: 11.08901%; }
+  .col-xl-7 {
+    width: 17.94201%; }
+  .col-xl-8 {
+    width: 29.03017%; }
+  .col-xl-9 {
+    width: 46.97082%; }
+  .col-xl-10 {
+    width: 75.99879%; } }
+
+html,
+body {
+  margin: 0;
+  padding: 0; }
+
+* {
+  box-sizing: border-box; }

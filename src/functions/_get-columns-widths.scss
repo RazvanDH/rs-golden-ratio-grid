@@ -1,0 +1,26 @@
+// send a list of proportions and it returns the percentage for each
+
+@function get-columns-widths($cols) {
+  $sum: 0;
+  $widths: ();
+
+  // find the sum of all proportions
+  @for $i from 1 through length($cols) {
+    $current-proportion: nth($cols, $i);
+    $ratio-proportion: nth($golden-scale, $current-proportion);
+    $sum: $sum + $ratio-proportion;
+  }
+
+  // find the proportion for each width
+  @for $i from 1 through length($cols) {
+    $current-width: 100 * nth($golden-scale, nth($cols, $i)) / $sum;
+
+    @if $i > 1 and $i == length($cols) {
+      $current-width: $current-width - .0001; // error margin
+    }
+
+    $widths: append($widths, $current-width);
+  }
+
+  @return $widths;
+}

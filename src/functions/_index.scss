@@ -1,4 +1,3 @@
-@import 'golden-grid';
-
-// after golden-grid
-@import 'generate-golden-ratio-scale';
+@import 'gr';
+@import 'golden-scale';
+@import 'get-columns-widths';

@@ -1,4 +1,6 @@
-@function golden-grid($val) {
+// function for easier navigation through the variables map
+
+@function gr($val) {
   @if map-has-key($golden-grid-config, $val) {
     @return map-get($golden-grid-config, $val);
   } @else {

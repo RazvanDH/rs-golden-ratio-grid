@@ -1,0 +1,14 @@
+// generate the golden scale
+
+@function golden-scale($golden-scale-list: 1) {
+
+  @for $i from $golden-scale-list through gr(max-number) {
+    $golden-scale-list-last: nth($golden-scale-list, length($golden-scale-list));
+
+    $golden-scale-list: append($golden-scale-list, $golden-scale-list-last * gr(ratio));
+  }
+
+  @return $golden-scale-list;
+}
+
+$golden-scale: golden-scale(1);

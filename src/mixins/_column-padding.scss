@@ -1,0 +1,6 @@
+@mixin column-padding {
+  @if gr(padding) {
+    padding-left: gr(padding);
+    padding-right: gr(padding);
+  }
+}

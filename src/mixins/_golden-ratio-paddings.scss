@@ -1,0 +1,32 @@
+// have a floating column that is still following the golden ratio proportions
+// $column is the column proportion related to the full width
+// $left is the margin left (as a proportion)
+// $right is the margin right (as a proportion)
+// eg: @include golden-ratio-paddings(4, 3, 2);
+
+@mixin golden-ratio-paddings($column, $left: false, $right: false) {
+  $cols: $column;
+
+  @if $left {
+    $cols: append($cols, $left);
+  }
+
+  @if $right {
+    $cols: append($cols, $right);
+  }
+
+  $cols: get-columns-widths($cols);
+
+  width: nth($cols, 1) * 1%;
+
+  @if $left {
+    margin-left: nth($cols, 2) * 1%;
+
+    @if $right {
+      margin-right: nth($cols, 3) * 1%;
+    }
+  } @elseif $right {
+    margin-right: nth($cols, 2) * 1%;
+  }
+
+}

@@ -1,0 +1,22 @@
+// mixin that generates the styling for each column in the columns mixin
+
+@mixin set-columns-widths($cols, $start-from: 0) {
+  @for $i from 1 through length($cols) {
+
+    // $start-from is making sure we're providing the offset for multiple columns
+    > :nth-child(#{$i + $start-from}) {
+      width: nth($cols, $i) * 1%;
+
+      // fallback
+      @if gr(no-flex-class) {
+        #{unquote(gr(no-flex-class))} & {
+
+          @if $i == 1 {
+            clear: left;
+          }
+        }
+      }
+
+    }
+  }
+}

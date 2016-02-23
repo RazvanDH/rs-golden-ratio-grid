@@ -4,3 +4,7 @@
 @import 'variables/index';
 @import 'functions/index';
 @import 'mixins/index';
+
+@if gr(utility-classes) {
+  @import 'utility-classes/index';
+}
