@@ -1,15 +1,24 @@
 // config
-
-$golden-grid-config: (
-  max-number: 10,
-  no-flex-class: '.ie-8',
-  padding: 1.5rem,
-  ratio: 1.618,
-  utility-classes: true,
-  utility-classes-breakpoints: (
-    s: false,
-    m: mobile-medium,
-    l: tablet-medium,
-    xl: desktop-medium
-  )
+$golden-grid-max-number: 10!default;
+$golden-grid-fallback-class: '.ie-8'!default;
+$golden-grid-padding: 1.5rem!default;
+$golden-grid-ratio: 1.618!default;
+$golden-grid-utility-classes: true!default;
+$golden-grid-breakpoints: (
+  s: false,
+  m: mobile-medium,
+  l: tablet-medium,
+  xl: desktop-medium
 )!default;
+
+
+
+// mapping the config for easier access
+$golden-grid-config: (
+  max-number: $golden-grid-max-number,
+  no-flex-class: $golden-grid-fallback-class,
+  padding: $golden-grid-padding,
+  ratio: $golden-grid-ratio,
+  utility-classes: $golden-grid-utility-classes,
+  utility-classes-breakpoints: $golden-grid-breakpoints
+);
