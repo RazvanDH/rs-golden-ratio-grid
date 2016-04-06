@@ -1,15 +1,15 @@
 {
-  "name": "golden-ratio-grid",
-  "version": "0.0.1",
+  "name": "rs-golden-ratio-grid",
+  "version": "0.0.2",
   "description": "Sass mixin and utility classes for golden ratio grid systems",
   "repository": {
     "type": "git",
-    "url": "https://github.com/RazvanDH/golden-ratio-grid.git"
+    "url": "https://github.com/RazvanDH/rs-golden-ratio-grid.git"
   },
   "authors": "Razvan Spatariu <razvanspatariu@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/RazvanDH/golden-ratio-grid/issues"
+    "url": "https://github.com/RazvanDH/rs-golden-ratio-grid/issues"
   },
   "homepage": "",
   "devDependencies": {
