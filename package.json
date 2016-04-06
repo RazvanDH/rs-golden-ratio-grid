@@ -15,6 +15,7 @@
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-sass": "^2.2.0",
-    "breakpoints": "https://github.com/RazvanDH/breakpoints.git"
+    "gulp-shopify-sass": "^0.1.2",
+    "rs-breakpoints": "^0.0.4"
   }
 }
