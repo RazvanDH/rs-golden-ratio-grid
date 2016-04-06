@@ -1,10 +1,425 @@
 // import the breakpoints mixin
-@import '../node_modules/rs-breakpoints/index';
+@if mixin-exists(breakpoint) == false {
+  $breakpoints-values: (
+  mobile-small: 320,
+  mobile-medium: 480,
+  mobile-large: 640,
 
-@import 'variables/index';
-@import 'functions/index';
-@import 'mixins/index';
+  tablet-small: 768,
+  tablet-medium: 800,
+  tablet-large: 980,
+
+  desktop-small: 1024,
+  desktop-medium: 1200,
+  desktop-large: 1400
+) !default;
+
+$breakpoints-ie8: false!default;
+
+@function _breakpoints-parse($string) {
+  // text to search for
+  $FROM: 'from ';
+  $TO: 'to ';
+
+
+  // convert to string
+  $string: inspect($string);
+
+
+  // flags for min and max values
+  $has-min: false;
+  $has-max: false;
+
+
+  // check what type of breakpoints we have
+  @if type-of(str-index($string, $FROM)) == number {
+    $has-min: true;
+  }
+
+  @if type-of(str-index($string, $TO)) == number {
+    $has-max: true;
+  }
+
+
+  // slice the string to retrieve min and max values for breakpoints
+  @if $has-min and $has-max {
+    $min-breakpoint: str-slice($string, str-length($FROM) + 1, str-index($string, $TO) - 2);
+    $max-breakpoint: str-slice($string, str-index($string, $TO) + str-length($TO));
+
+    @return ($min-breakpoint, $max-breakpoint);
+  } @else if $has-min == false {
+    $max-breakpoint: str-slice($string, str-length($TO) + 1);
+
+    @return (false, $max-breakpoint);
+  } @else if $has-max == false {
+    $min-breakpoint: str-slice($string, str-length($FROM) + 1);
+
+    @return ($min-breakpoint, false);
+  }
+
+  @return (false, false);
+}
+
+@function _string-to-number($string) {
+  // inspired by http://hugogiraudel.com/2014/01/15/sass-string-to-number/
+
+  $digits: '0123456789';
+  $number: 0;
+  $negative: false;
+  $units: (
+    '%': 1%,
+    'ch': 1ch,
+    'cm': 1cm,
+    'em': 1em,
+    'ex': 1ex,
+    'in': 1in,
+    'mm': 1mm,
+    'pc': 1pc,
+    'pica': 1pica,
+    'pt': 1pt,
+    'px': 1px,
+    'rem': 1rem,
+    'vmax': 1vmax,
+    'vmin': 1vmin,
+    'vh': 1vh,
+    'vw': 1vw
+  );
+  $unit: null;
+
+  // is it negative?
+  @if str-index($string, '-') == 1 {
+    $negative: true;
+    $string: str-slice($string, 2);
+  }
+
+  // parse the string and map it to the indexes of $digits
+  @for $i from 1 through str-length($string) {
+    $digit: str-slice($string, $i, $i);
+    $index: str-index($digits, $digit);
+
+    @if type-of($index) == number {
+      $number: $number * 10 + ($index - 1);
+    } @else {
+      $unit: $unit#{$digit};
+    }
+  }
+
+  @if $negative {
+    $number: $number * (-1);
+  }
+
+  @if $unit and map-has-key($units, $unit) {
+    $number: $number * map-get($units, $unit);
+  }
+
+  @if $string == $unit {
+    @return false;
+  }
+
+  @return $number;
+}
+
+@function _breakpoints-values($value) {
+  // try to get the value from the pre-existing breakpoints
+  @if map-has-key($breakpoints-values, $value) {
+    $value: map-get($breakpoints-values, $value);
+    @if unitless($value) {
+      $value: $value * 1px;
+    }
+  }
+
+  @if type-of($value) == string {
+    $value: _string-to-number($value);
+  }
+
+  @if type-of($value) != number {
+    @return false;
+  }
+
+  @return $value;
+}
+
+
+@mixin breakpoint($string) {
+  $string: _breakpoints-parse($string);
+  $min-breakpoint: _breakpoints-values(nth($string, 1));
+  $max-breakpoint: _breakpoints-values(nth($string, 2));
+
+  @if ($min-breakpoint == false and $max-breakpoint == false) or ($max-breakpoint == false and $breakpoints-ie8) {
+    @content;
+  } @else if $min-breakpoint == false {
+    @media only screen and (max-width: $max-breakpoint - 1) {
+      @content;
+    }
+  } @else if $max-breakpoint == false {
+    @media only screen and (min-width: $min-breakpoint) {
+      @content;
+    }
+  } @else {
+    @media only screen and (min-width: $min-breakpoint) and (max-width: $max-breakpoint - 1) {
+      @content;
+    }
+  }
+}
+
+
+
+}
+
+// config
+$golden-grid-max-number: 10!default;
+$golden-grid-fallback-class: '.ie-8'!default;
+$golden-grid-padding: 1.5rem!default;
+$golden-grid-ratio: 1.618!default;
+$golden-grid-utility-classes: true!default;
+$golden-grid-breakpoints: (
+  s: false,
+  m: mobile-medium,
+  l: tablet-medium,
+  xl: desktop-medium
+)!default;
+
+
+
+// mapping the config for easier access
+$golden-grid-config: (
+  max-number: $golden-grid-max-number,
+  no-flex-class: $golden-grid-fallback-class,
+  padding: $golden-grid-padding,
+  ratio: $golden-grid-ratio,
+  utility-classes: $golden-grid-utility-classes,
+  utility-classes-breakpoints: $golden-grid-breakpoints
+);
+
+// function for easier navigation through the variables map
+
+@function gr($val) {
+  @if map-has-key($golden-grid-config, $val) {
+    @return map-get($golden-grid-config, $val);
+  } @else {
+    @error '#{$val} does not exist';
+  }
+}
+
+// generate the golden scale
+
+@function golden-scale($golden-scale-list: 1) {
+
+  @for $i from $golden-scale-list through gr(max-number) {
+    $golden-scale-list-last: nth($golden-scale-list, length($golden-scale-list));
+
+    $golden-scale-list: append($golden-scale-list, $golden-scale-list-last * gr(ratio));
+  }
+
+  @return $golden-scale-list;
+}
+
+$golden-scale: golden-scale(1);
+
+// send a list of proportions and it returns the percentage for each
+
+@function get-columns-widths($cols) {
+  $sum: 0;
+  $widths: ();
+
+  // find the sum of all proportions
+  @for $i from 1 through length($cols) {
+    $current-proportion: nth($cols, $i);
+    $ratio-proportion: nth($golden-scale, $current-proportion);
+    $sum: $sum + $ratio-proportion;
+  }
+
+  // find the proportion for each width
+  @for $i from 1 through length($cols) {
+    $current-width: 100 * nth($golden-scale, nth($cols, $i)) / $sum;
+
+    @if $i > 1 and $i == length($cols) {
+      $current-width: $current-width - .0001; // error margin
+    }
+
+    $widths: append($widths, $current-width);
+  }
+
+  @return $widths;
+}
+
+
+@mixin column-padding {
+  @if gr(padding) {
+    padding-left: gr(padding);
+    padding-right: gr(padding);
+  }
+}
+
+// this mixin sets the styling for the wrapper of the elements
+// the flag is for table support
+
+@mixin columns-wrapper {
+
+  @if gr(no-flex-class) {
+    #{unquote(gr(no-flex-class))} & {
+      > * {
+        @include column-padding;
+      }
+
+      &:after {
+        content: '';
+        clear: both;
+      }
+    }
+  }
+
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+
+  width: 100%;
+}
+
+// mixin that generates the styling for each column in the columns mixin
+
+@mixin set-columns-widths($cols, $start-from: 0) {
+  @for $i from 1 through length($cols) {
+
+    // $start-from is making sure we're providing the offset for multiple columns
+    > :nth-child(#{$i + $start-from}) {
+      width: nth($cols, $i) * 1%;
+
+      // fallback
+      @if gr(no-flex-class) {
+        #{unquote(gr(no-flex-class))} & {
+
+          @if $i == 1 {
+            clear: left;
+          }
+        }
+      }
+
+    }
+  }
+}
+
+// have a floating column that is still following the golden ratio proportions
+// $column is the column proportion related to the full width
+// $left is the margin left (as a proportion)
+// $right is the margin right (as a proportion)
+// eg: @include golden-ratio-paddings(4, 3, 2);
+
+@mixin golden-ratio-paddings($column, $left: false, $right: false) {
+  $cols: $column;
+
+  @if $left {
+    $cols: append($cols, $left);
+  }
+
+  @if $right {
+    $cols: append($cols, $right);
+  }
+
+  $cols: get-columns-widths($cols);
+
+  width: nth($cols, 1) * 1%;
+
+  @if $left {
+    margin-left: nth($cols, 2) * 1%;
+
+    @if $right {
+      margin-right: nth($cols, 3) * 1%;
+    }
+  } @elseif $right {
+    margin-right: nth($cols, 2) * 1%;
+  }
+
+}
+
+
+// the mixin that generate the columns
+
+@mixin columns($cols...) {
+  @include columns-wrapper;
+
+  // check if a comma is present in the cols declaration
+  $multi-columns: str-index($cols + '', ',');
+
+  > * {
+    @if gr(no-flex-class) {
+      #{unquote(gr(no-flex-class))} & {
+        float: left;
+      }
+    }
+
+    @include column-padding;
+  }
+
+  @if type-of($multi-columns) == null {
+
+    // all columns are on 1 row, calculate the widths
+    $widths: get-columns-widths($cols);
+
+    // set them accordingly
+    @include set-columns-widths($widths);
+
+  } @else {
+    // we have multiple rows for columns
+
+    // this is the index that counts the :nth-child
+    // we need this because we are iterating through a list of lists
+    $start-from: 0;
+
+    // go through each row
+    @for $i from 1 through length($cols) {
+
+      // find the widths for each row
+      $widths: get-columns-widths(nth($cols, $i));
+
+      // set the widths
+      @include set-columns-widths($widths, $start-from);
+
+      // update the offset index
+      $start-from: $start-from + length($widths);
+    }
+  }
+}
+
+
 
 @if gr(utility-classes) {
-  @import 'utility-classes/index';
+  .col {
+  // generate responsive classes
+  $responsive-map: gr(utility-classes-breakpoints);
+  $responsive-keys: map-keys($responsive-map);
+  $responsive-values: map-values($responsive-map);
+
+  @for $i from 1 through length($responsive-keys) {
+    $breakpoint-from: nth($responsive-values, $i);
+
+    @include breakpoint(from $breakpoint-from) {
+      &-#{nth($responsive-keys, $i)} {
+
+        &-wrapper {
+          display: table;
+          table-layout: fixed;
+          width: 100%;
+        }
+
+        &-wrapper > * {
+          @include column-padding;
+          display: table-cell;
+        }
+
+        @for $j from 1 through gr(max-number) {
+          $current-absolute-proportion: nth($golden-scale, $j);
+          &-#{$j} {
+            width: $current-absolute-proportion * 1%;
+          }
+        }
+      }
+    }
+  }
+}
+
 }

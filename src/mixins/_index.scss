@@ -1,6 +1,6 @@
-@import 'column-padding';
-@import 'columns-wrapper';
-@import 'set-columns-widths';
-@import 'golden-ratio-paddings';
+@import '_column-padding.scss';
+@import '_columns-wrapper.scss';
+@import '_set-columns-widths.scss';
+@import '_golden-ratio-paddings.scss';
 
-@import 'columns';
+@import '_columns.scss';
