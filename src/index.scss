@@ -1,7 +1,5 @@
 // import the breakpoints mixin
-@if mixin-exists(breakpoint) == false {
-  @import '../node_modules/rs-breakpoints/index.scss';
-}
+@import '../node_modules/rs-breakpoints/index.scss';
 
 @import 'variables/_index.scss';
 @import 'functions/_index.scss';
