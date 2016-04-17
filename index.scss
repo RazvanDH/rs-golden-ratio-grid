@@ -1,6 +1,5 @@
 // import the breakpoints mixin
-@if mixin-exists(breakpoint) == false {
-  $breakpoints-values: (
+$breakpoints-values: (
   mobile-small: 320,
   mobile-medium: 480,
   mobile-large: 640,
@@ -164,7 +163,6 @@ $breakpoints-ie8: false!default;
 
 
 
-}
 
 // config
 $golden-grid-max-number: 10!default;
