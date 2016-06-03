@@ -1,0 +1,45 @@
+// the mixin that generate the columns with no padding
+
+@mixin columns-no-padding($cols...) {
+  @include columns-wrapper;
+
+  // check if a comma is present in the cols declaration
+  $multi-columns: str-index($cols + '', ',');
+
+  > * {
+    @if gr(no-flex-class) {
+      #{unquote(gr(no-flex-class))} & {
+        float: left;
+      }
+    }
+  }
+
+  @if type-of($multi-columns) == null {
+
+    // all columns are on 1 row, calculate the widths
+    $widths: get-columns-widths($cols);
+
+    // set them accordingly
+    @include set-columns-widths($widths);
+
+  } @else {
+    // we have multiple rows for columns
+
+    // this is the index that counts the :nth-child
+    // we need this because we are iterating through a list of lists
+    $start-from: 0;
+
+    // go through each row
+    @for $i from 1 through length($cols) {
+
+      // find the widths for each row
+      $widths: get-columns-widths(nth($cols, $i));
+
+      // set the widths
+      @include set-columns-widths($widths, $start-from);
+
+      // update the offset index
+      $start-from: $start-from + length($widths);
+    }
+  }
+}

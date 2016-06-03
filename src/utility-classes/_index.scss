@@ -1,30 +1,32 @@
-.col {
-  // generate responsive classes
-  $responsive-map: gr(utility-classes-breakpoints);
-  $responsive-keys: map-keys($responsive-map);
-  $responsive-values: map-values($responsive-map);
+@if gr(utility-classes) {
+  .col {
+    // generate responsive classes
+    $responsive-map: gr(utility-classes-breakpoints);
+    $responsive-keys: map-keys($responsive-map);
+    $responsive-values: map-values($responsive-map);
 
-  @for $i from 1 through length($responsive-keys) {
-    $breakpoint-from: nth($responsive-values, $i);
+    @for $i from 1 through length($responsive-keys) {
+      $breakpoint-from: nth($responsive-values, $i);
 
-    @include breakpoint(from $breakpoint-from) {
-      &-#{nth($responsive-keys, $i)} {
+      @include breakpoint(from $breakpoint-from) {
+        &-#{nth($responsive-keys, $i)} {
 
-        &-wrapper {
-          display: table;
-          table-layout: fixed;
-          width: 100%;
-        }
+          &-wrapper {
+            display: table;
+            table-layout: fixed;
+            width: 100%;
+          }
 
-        &-wrapper > * {
-          @include column-padding;
-          display: table-cell;
-        }
+          &-wrapper > * {
+            @include column-padding;
+            display: table-cell;
+          }
 
-        @for $j from 1 through gr(max-number) {
-          $current-absolute-proportion: nth($golden-scale, $j);
-          &-#{$j} {
-            width: $current-absolute-proportion * 1%;
+          @for $j from 1 through gr(max-number) {
+            $current-absolute-proportion: nth($golden-scale, $j);
+            &-#{$j} {
+              width: $current-absolute-proportion * 1%;
+            }
           }
         }
       }

@@ -4,7 +4,4 @@
 @import 'variables/_index.scss';
 @import 'functions/_index.scss';
 @import 'mixins/_index.scss';
-
-@if gr(utility-classes) {
-  @import 'utility-classes/_index.scss';
-}
+@import 'utility-classes/_index.scss';
