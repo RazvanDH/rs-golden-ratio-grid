@@ -6,8 +6,10 @@
   @if gr(no-flex-class) {
     #{unquote(gr(no-flex-class))} & {
       &:after {
-        content: '';
+        display: block;
+        width: 100%;
         clear: both;
+        content: '';
       }
     }
   }
