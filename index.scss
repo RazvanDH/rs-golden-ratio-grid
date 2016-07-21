@@ -138,16 +138,30 @@ $breakpoints-ie8: false!default;
   @return $value;
 }
 
+@function _set-max-breakpoint($max-breakpoint) {
+  @if $max-breakpoint != false {
+    @if unit($max-breakpoint) == px {
+      $max-breakpoint: $max-breakpoint - 1;
+    } @else {
+      $max-breakpoint: $max-breakpoint;
+    }
+  }
+
+  @return $max-breakpoint;
+}
+
 
 @mixin breakpoint($string) {
   $string: _breakpoints-parse($string);
   $min-breakpoint: _breakpoints-values(nth($string, 1));
   $max-breakpoint: _breakpoints-values(nth($string, 2));
 
+  $max-breakpoint: _set-max-breakpoint($max-breakpoint);
+
   @if ($min-breakpoint == false and $max-breakpoint == false) or ($max-breakpoint == false and $breakpoints-ie8) {
     @content;
   } @else if $min-breakpoint == false {
-    @media only screen and (max-width: $max-breakpoint - 1) {
+    @media only screen and (max-width: $max-breakpoint) {
       @content;
     }
   } @else if $max-breakpoint == false {
@@ -155,10 +169,30 @@ $breakpoints-ie8: false!default;
       @content;
     }
   } @else {
-    @media only screen and (min-width: $min-breakpoint) and (max-width: $max-breakpoint - 1) {
+    @media only screen and (min-width: $min-breakpoint) and (max-width: $max-breakpoint) {
       @content;
     }
   }
+}
+
+
+// require breakpoint
+@mixin to($media-query) {
+  @include breakpoint(to $media-query) {
+    @content;
+  };
+}
+
+@mixin from($media-query) {
+  @include breakpoint(from $media-query) {
+    @content;
+  };
+}
+
+@mixin from-to($min, $max) {
+  @include breakpoint(from $min to $max) {
+    @content;
+  };
 }
 
 
@@ -170,6 +204,7 @@ $golden-grid-fallback-class: '.ie-8'!default;
 $golden-grid-padding: 1.5rem!default;
 $golden-grid-ratio: 1.618!default;
 $golden-grid-utility-classes: true!default;
+$golden-grid-vendor-prefixes: true!default;
 $golden-grid-breakpoints: (
   s: false,
   m: mobile-medium,
@@ -186,7 +221,8 @@ $golden-grid-config: (
   padding: $golden-grid-padding,
   ratio: $golden-grid-ratio,
   utility-classes: $golden-grid-utility-classes,
-  utility-classes-breakpoints: $golden-grid-breakpoints
+  utility-classes-breakpoints: $golden-grid-breakpoints,
+  vendor-prefixes: $golden-grid-vendor-prefixes
 );
 
 // function for easier navigation through the variables map
@@ -256,10 +292,6 @@ $golden-scale: golden-scale(1);
 
   @if gr(no-flex-class) {
     #{unquote(gr(no-flex-class))} & {
-      > * {
-        @include column-padding;
-      }
-
       &:after {
         content: '';
         clear: both;
@@ -267,13 +299,19 @@ $golden-scale: golden-scale(1);
     }
   }
 
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
 
-  -webkit-flex-wrap: wrap;
-      -ms-flex-wrap: wrap;
-          flex-wrap: wrap;
+  @if gr(vendor-prefixes) {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+  }
+
+  flex-wrap: wrap;
+
+  @if gr(vendor-prefixes) {
+    -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+  }
 
   width: 100%;
 }
@@ -402,7 +440,7 @@ $golden-scale: golden-scale(1);
     @for $i from 1 through length($responsive-keys) {
       $breakpoint-from: nth($responsive-values, $i);
 
-      @include breakpoint(from $breakpoint-from) {
+      @include from($breakpoint-from) {
         &-#{nth($responsive-keys, $i)} {
 
           &-wrapper {
