@@ -16,6 +16,6 @@
     "gulp": "^3.9.0",
     "gulp-sass": "^2.2.0",
     "gulp-shopify-sass": "^0.1.2",
-    "rs-breakpoints": "^0.0.4"
+    "rs-breakpoints": "^0.0.5"
   }
 }
