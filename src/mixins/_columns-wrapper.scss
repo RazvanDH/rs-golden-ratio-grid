@@ -5,24 +5,28 @@
 
   @if gr(no-flex-class) {
     #{unquote(gr(no-flex-class))} & {
-      > * {
-        @include column-padding;
-      }
-
       &:after {
-        content: '';
+        display: block;
+        width: 100%;
         clear: both;
+        content: '';
       }
     }
   }
 
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
 
-  -webkit-flex-wrap: wrap;
-      -ms-flex-wrap: wrap;
-          flex-wrap: wrap;
+  @if gr(vendor-prefixes) {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+  }
+
+  flex-wrap: wrap;
+
+  @if gr(vendor-prefixes) {
+    -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+  }
 
   width: 100%;
 }

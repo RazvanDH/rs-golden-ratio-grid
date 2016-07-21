@@ -1,9 +1,10 @@
 // config
 $golden-grid-max-number: 10!default;
-$golden-grid-fallback-class: '.ie-8'!default;
+$golden-grid-fallback-class: '.no-flexbox'!default;
 $golden-grid-padding: 1.5rem!default;
 $golden-grid-ratio: 1.618!default;
 $golden-grid-utility-classes: true!default;
+$golden-grid-vendor-prefixes: true!default;
 $golden-grid-breakpoints: (
   s: false,
   m: mobile-medium,
@@ -20,5 +21,6 @@ $golden-grid-config: (
   padding: $golden-grid-padding,
   ratio: $golden-grid-ratio,
   utility-classes: $golden-grid-utility-classes,
-  utility-classes-breakpoints: $golden-grid-breakpoints
+  utility-classes-breakpoints: $golden-grid-breakpoints,
+  vendor-prefixes: $golden-grid-vendor-prefixes
 );
