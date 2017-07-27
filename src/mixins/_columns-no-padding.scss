@@ -1,45 +1,66 @@
 // the mixin that generate the columns with no padding
 
 @mixin columns-no-padding($cols...) {
-  @include columns-wrapper;
+  @if nth($cols, 1) == equal {
+    width: 100%;
+    display: flex;
 
-  // check if a comma is present in the cols declaration
-  $multi-columns: str-index($cols + '', ',');
+    > * {
+      flex-grow: 1;
+      flex-shrink: 1;
+      flex-basis: 0;
+    }
 
-  > * {
     @if gr(no-flex-class) {
-      #{unquote(gr(no-flex-class))} & {
-        float: left;
+      display: table;
+      table-layout: fixed;
+
+      > * {
+        display: table-cell;
+        width: 1%;
       }
     }
-  }
-
-  @if type-of($multi-columns) == null {
-
-    // all columns are on 1 row, calculate the widths
-    $widths: get-columns-widths($cols);
-
-    // set them accordingly
-    @include set-columns-widths($widths);
-
   } @else {
-    // we have multiple rows for columns
+    @include columns-wrapper;
 
-    // this is the index that counts the :nth-child
-    // we need this because we are iterating through a list of lists
-    $start-from: 0;
+    > * {
+      @if gr(no-flex-class) {
+        #{unquote(gr(no-flex-class))} & {
+          float: left;
+        }
+      }
+    }
 
-    // go through each row
-    @for $i from 1 through length($cols) {
+    // check if a comma is present in the cols declaration
+    $multi-columns: str-index($cols + '', ',');
 
-      // find the widths for each row
-      $widths: get-columns-widths(nth($cols, $i));
+    @if type-of($multi-columns) == null {
 
-      // set the widths
-      @include set-columns-widths($widths, $start-from);
+      // all columns are on 1 row, calculate the widths
+      $widths: get-columns-widths($cols);
 
-      // update the offset index
-      $start-from: $start-from + length($widths);
+      // set them accordingly
+      @include set-columns-widths($widths);
+
+    } @else {
+      // we have multiple rows for columns
+
+      // this is the index that counts the :nth-child
+      // we need this because we are iterating through a list of lists
+      $start-from: 0;
+
+      // go through each row
+      @for $i from 1 through length($cols) {
+
+        // find the widths for each row
+        $widths: get-columns-widths(nth($cols, $i));
+
+        // set the widths
+        @include set-columns-widths($widths, $start-from);
+
+        // update the offset index
+        $start-from: $start-from + length($widths);
+      }
     }
   }
 }
