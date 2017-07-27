@@ -12,12 +12,14 @@
     }
 
     @if gr(no-flex-class) {
-      display: table;
-      table-layout: fixed;
+      #{unquote(gr(no-flex-class))} & {
+        display: table;
+        table-layout: fixed;
 
-      > * {
-        display: table-cell;
-        width: 1%;
+        > * {
+          display: table-cell;
+          width: 1%;
+        }
       }
     }
   } @else {
