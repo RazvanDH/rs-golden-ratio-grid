@@ -1,7 +1,4 @@
 // import the breakpoints mixin
 @import '../node_modules/rs-breakpoints/index.scss';
 
-@import 'variables/_index.scss';
-@import 'functions/_index.scss';
-@import 'mixins/_index.scss';
-@import 'utility-classes/_index.scss';
+@import 'index-no-breakpoints';
