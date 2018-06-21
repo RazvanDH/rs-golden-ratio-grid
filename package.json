@@ -1,6 +1,6 @@
 {
   "name": "rs-golden-ratio-grid",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Sass mixin and utility classes for golden ratio grid systems",
   "repository": {
     "type": "git",
