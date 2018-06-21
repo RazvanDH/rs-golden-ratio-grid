@@ -1,4 +1,5 @@
 const gulp = require('gulp');
+const rename = require('gulp-rename');
 const gulpSass = require('gulp-sass');
 const gss = require('gulp-shopify-sass');
 
@@ -11,6 +12,10 @@ gulp.task('sandbox', function() {
 gulp.task('concatenate', function() {
   gulp.src('src/*.scss')
     .pipe(gss())
+    .pipe(rename((path) => {
+      path.basename = path.basename.split('.')[0];
+      path.extname = ".scss";
+    }))
     .pipe(gulp.dest(''));
 });
 
