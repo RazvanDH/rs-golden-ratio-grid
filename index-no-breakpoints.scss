@@ -274,6 +274,7 @@ $golden-scale: golden-scale(1);
           &-wrapper > * {
             @include column-padding;
             display: table-cell;
+            vertical-align: top;
           }
 
           @for $j from 1 through gr(max-number) {
